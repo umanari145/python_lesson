@@ -64,9 +64,7 @@ Email address: root@gmail.com
 password pa$$w0rd#
 ```
 
-モデルの追加
+個別プロジェクトの追加(初期設定と個別のモデルの２パターンある)
 ```bash
-python manage.py startapp myapp
-
-
+python manage.py startapp customer
 ```
