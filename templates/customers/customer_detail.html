@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}顧客詳細 - 顧客管理システム{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{% url 'customers:customer_list' %}" class="text-primary-600 hover:text-primary-900">
+        &larr; 一覧に戻る
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-900">顧客詳細</h1>
+        <div class="space-x-2">
+            <a href="{% url 'customers:customer_update' customer.pk %}" class="btn-primary">
+                編集
+            </a>
+            <a href="{% url 'customers:customer_delete' customer.pk %}" class="btn-danger">
+                削除
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">氏名</h3>
+                <p class="mt-1 text-lg text-gray-900">{{ customer.full_name }}</p>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">メールアドレス</h3>
+                <p class="mt-1 text-lg text-gray-900">
+                    <a href="mailto:{{ customer.email }}" class="text-primary-600 hover:text-primary-900">
+                        {{ customer.email }}
+                    </a>
+                </p>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">電話番号</h3>
+                <p class="mt-1 text-lg text-gray-900">
+                    <a href="tel:{{ customer.phone_number }}" class="text-primary-600 hover:text-primary-900">
+                        {{ customer.phone_number }}
+                    </a>
+                </p>
+            </div>
+
+            {% if customer.gender %}
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">性別</h3>
+                <p class="mt-1 text-lg text-gray-900">{{ customer.get_gender_display }}</p>
+            </div>
+            {% endif %}
+
+            {% if customer.birth_date %}
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">生年月日</h3>
+                <p class="mt-1 text-lg text-gray-900">{{ customer.birth_date|date:"Y年n月j日" }}</p>
+            </div>
+            {% endif %}
+
+            {% if customer.postal_code %}
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">郵便番号</h3>
+                <p class="mt-1 text-lg text-gray-900">{{ customer.postal_code }}</p>
+            </div>
+            {% endif %}
+
+            {% if customer.address %}
+            <div class="md:col-span-2">
+                <h3 class="text-sm font-medium text-gray-500">住所</h3>
+                <p class="mt-1 text-lg text-gray-900">{{ customer.address }}</p>
+            </div>
+            {% endif %}
+
+            {% if customer.notes %}
+            <div class="md:col-span-2">
+                <h3 class="text-sm font-medium text-gray-500">備考</h3>
+                <p class="mt-1 text-gray-900 whitespace-pre-wrap">{{ customer.notes }}</p>
+            </div>
+            {% endif %}
+
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">登録日時</h3>
+                <p class="mt-1 text-gray-900">{{ customer.created_at|date:"Y年n月j日 H:i" }}</p>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">最終更新日時</h3>
+                <p class="mt-1 text-gray-900">{{ customer.updated_at|date:"Y年n月j日 H:i" }}</p>
+            </div>
+
+            {% if customer.created_by %}
+            <div>
+                <h3 class="text-sm font-medium text-gray-500">登録者</h3>
+                <p class="mt-1 text-gray-900">{{ customer.created_by.username }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

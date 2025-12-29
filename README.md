@@ -55,3 +55,18 @@ python manage.py migrate
 python manage.py runserver  0:8000
 ```
 
+スーパーユーザーの作成
+```bash
+python manage.py createsuperuser
+
+Username: root
+Email address: root@gmail.com
+password pa$$w0rd#
+```
+
+モデルの追加
+```bash
+python manage.py startapp myapp
+
+
+```
