@@ -1,7 +1,7 @@
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Customer
 from .forms import CustomerForm
@@ -39,4 +39,25 @@ def CustomerCreateView(request):
     
     return render(request, 'customers/customer_create.html', {
         'form': form,
+    })
+
+def CustomerUpdateView(request, pk):
+    """顧客編集ビュー"""
+    # 編集対象の顧客を取得（存在しない場合は404エラー）
+    customer = get_object_or_404(Customer, pk=pk)
+    
+    if request.method == 'POST':
+        # 既存のインスタンスを渡してフォームを作成
+        form = CustomerForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '顧客情報を更新しました。')
+            return redirect('customers:customer_list')
+    else:
+        # 既存のデータでフォームを初期化
+        form = CustomerForm(instance=customer)
+    
+    return render(request, 'customers/customer_edit.html', {
+        'form': form,
+        'customer': customer,
     })

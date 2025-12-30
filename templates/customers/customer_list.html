@@ -44,6 +44,17 @@
             background-color: #f2f2f2;
         }
         
+        .customer-link {
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .customer-link:hover {
+            color: #0b7dda;
+            text-decoration: underline;
+        }
+        
         .messages {
             margin-bottom: 20px;
         }
@@ -90,7 +101,11 @@
             <tbody>
                 {% for customer in customers %}
                 <tr>
-                    <td>{{ customer.customer_no }}</td>
+                    <td>
+                        <a href="{% url 'customers:customer_edit' customer.pk %}" class="customer-link">
+                            {{ customer.customer_no }}
+                        </a>
+                    </td>
                     <td>{{ customer.name }}</td>
                     <td>{{ customer.registered_date|date:"Y年m月d日" }}</td>
                     <td>{{ customer.pref.name }}</td>

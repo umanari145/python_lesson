@@ -35,6 +35,21 @@ class CustomerForm(forms.ModelForm):
             'pref': '都道府県',
         }
     
+    def clean_customer_no(self):
+        """会員番号のバリデーション"""
+        customer_no = self.cleaned_data['customer_no']
+        
+        # 重複チェック（編集時は自分自身を除外）
+        queryset = Customer.objects.filter(customer_no=customer_no)
+        if self.instance.pk:
+            # 編集時は自分自身を除外
+            queryset = queryset.exclude(pk=self.instance.pk)
+        
+        if queryset.exists():
+            raise ValidationError('この会員番号は既に登録されています')
+        
+        return customer_no
+    
     def clean_name(self):
         """名前のバリデーション"""
         name = self.cleaned_data['name']
