@@ -11,22 +11,17 @@ class CustomerForm(forms.ModelForm):
         fields = ['customer_no', 'name', 'registered_date', 'pref']
         widgets = {
             'customer_no': forms.NumberInput(attrs={
-                'class': 'form-control',
                 'placeholder': '会員番号を入力'
             }),
             'name': forms.TextInput(attrs={
-                'class': 'form-control',
                 'placeholder': '名前を入力'
             }),
             'registered_date': forms.DateInput(attrs={
-                'class': 'form-control',
                 'type': 'date'
             }),
             # forms.Selectは、ForeignKey(Prefecture)フィールドのため、
             #選択肢（Prefectureのレコード一覧）は自動でセットされます
-            'pref': forms.Select(attrs={
-                'class': 'form-control'
-            }),
+            'pref': forms.Select(),
         }
         labels = {
             'customer_no': '会員番号',

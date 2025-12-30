@@ -9,6 +9,7 @@ Django + Tailwind CSS + PostgreSQL + Dockerによる顧客管理システムで�
 ```bash
 # コンテナのビルドと起動
 docker compose build
+docker compose up -d
 ```
 
 プロジェクト開始
@@ -96,4 +97,17 @@ docker-compose exec web python manage.py setup_data
 docker-compose exec web python manage.py migrate customer zero
 # customerアプリの0001_initialに戻る
 docker-compose exec web python manage.py migrate customer 0001_initial
+```
+
+#### Tailwind CSSのセットアップ
+
+```bash
+# Node.jsの依存関係をインストール
+docker compose exec web npm install
+
+# Tailwind CSSをビルド
+docker compose exec web npm run build:css
+
+# 開発時は監視モードで自動ビルド
+docker compose exec web npm run watch:css
 ```
