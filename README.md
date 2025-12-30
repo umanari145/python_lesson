@@ -84,5 +84,16 @@ docker-compose exec web python manage.py migrate
 
 テストデータ投入
 ```bash
+# 個別投入
 docker-compose exec web python manage.py create_test_data
+# 全実行
+docker-compose exec web python manage.py setup_data
+```
+
+ロールバック
+```bash
+# 全ロールバック
+docker-compose exec web python manage.py migrate customer zero
+# customerアプリの0001_initialに戻る
+docker-compose exec web python manage.py migrate customer 0001_initial
 ```

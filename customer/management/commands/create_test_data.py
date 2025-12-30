@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from customer.models import Customer
+from customer.models import Customer, Prefecture
 import csv
 import os
 
@@ -25,11 +25,15 @@ class Command(BaseCommand):
             reader = csv.DictReader(f)
             
             for row in reader:
+                # pref_codeから都道府県オブジェクトを取得
+                pref_code = int(row['pref'])
+                prefecture = Prefecture.objects.get(code=pref_code)
+                
                 customer = Customer(
                     customer_no=int(row['customer_no']),
                     name=row['name'],
                     registered_date=row['registered_date'],
-                    pref=int(row['pref'])
+                    pref=prefecture
                 )
                 customers.append(customer)
         

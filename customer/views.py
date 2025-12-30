@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from django.conf import settings
 from django.shortcuts import render
 from .models import Customer
+import pprint
 
 def CustomerListView(request):
     customer_list = Customer.objects.all()
@@ -10,8 +11,7 @@ def CustomerListView(request):
     paginator = Paginator(customer_list, 10)
     page_number = request.GET.get('page')
     customers = paginator.get_page(page_number)
-    
-    # ページ番号のリストを作成（現在のページの前後3ページ）
+     # ページ番号のリストを作成（現在のページの前後3ページ）
     current_page = customers.number
     page_range = range(
         max(1, current_page - 3),
