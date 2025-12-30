@@ -7,7 +7,7 @@ from .models import Customer
 from .forms import CustomerForm
 import pprint
 
-def CustomerListView(request):
+def list_view(request):
     """顧客一覧ビュー"""
     customer_list = Customer.objects.all()
     # 1ページあたり10件
@@ -21,12 +21,12 @@ def CustomerListView(request):
         min(paginator.num_pages + 1, current_page + 4)
     )
     
-    return render(request, 'customers/customer_list.html', {
+    return render(request, 'customers/list.html', {
         'customers': customers,
         'page_range': page_range,
     })
 
-def CustomerCreateView(request):
+def create_view(request):
     """顧客新規登録ビュー"""
     if request.method == 'POST':
         form = CustomerForm(request.POST)
@@ -37,11 +37,11 @@ def CustomerCreateView(request):
     else:
         form = CustomerForm()
     
-    return render(request, 'customers/customer_create.html', {
+    return render(request, 'customers/create.html', {
         'form': form,
     })
 
-def CustomerUpdateView(request, pk):
+def update_view(request, pk):
     """顧客編集ビュー"""
     # 編集対象の顧客を取得（存在しない場合は404エラー）
     customer = get_object_or_404(Customer, pk=pk)
@@ -57,12 +57,12 @@ def CustomerUpdateView(request, pk):
         # 既存のデータでフォームを初期化
         form = CustomerForm(instance=customer)
     
-    return render(request, 'customers/customer_edit.html', {
+    return render(request, 'customers/edit.html', {
         'form': form,
         'customer': customer,
     })
 
-def CustomerDeleteView(request):
+def delete_view(request):
     """顧客削除ビュー（複数選択対応）"""
     if request.method == 'POST':
         # チェックボックスで選択されたIDを取得
