@@ -65,34 +65,13 @@
 {% endblock %}
 
 {% block extra_js %}
+{% load static %}
 <script>
-    // 商品の価格情報
-    const productPrices = {{ product_prices_json|safe }};
-    
-    // 商品選択時のイベントリスナー
-    document.addEventListener('DOMContentLoaded', function() {
-        const productSelect = document.getElementById('{{ form.product.id_for_label }}');
-        const priceInfo = document.getElementById('product-price-info');
-        const priceDisplay = document.getElementById('product-price');
-        
-        if (productSelect) {
-            productSelect.addEventListener('change', function() {
-                const selectedProductId = this.value;
-                
-                if (selectedProductId && productPrices[selectedProductId]) {
-                    const price = parseFloat(productPrices[selectedProductId]);
-                    priceDisplay.textContent = price.toLocaleString('ja-JP');
-                    priceInfo.classList.remove('hidden');
-                } else {
-                    priceInfo.classList.add('hidden');
-                }
-            });
-            
-            // 初期表示時に商品が選択されている場合（編集時）
-            if (productSelect.value) {
-                productSelect.dispatchEvent(new Event('change'));
-            }
-        }
-    });
+    // 商品価格情報とフィールドIDを設定
+    window.salesFormConfig = {
+        productPrices: {{ product_prices_json|safe }},
+        fieldId: '{{ form.product.id_for_label }}'
+    };
 </script>
+<script src="{% static 'js/sales-form.js' %}"></script>
 {% endblock %}
