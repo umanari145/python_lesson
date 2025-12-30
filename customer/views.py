@@ -1,11 +1,14 @@
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Customer
+from .forms import CustomerForm
 import pprint
 
 def CustomerListView(request):
+    """顧客一覧ビュー"""
     customer_list = Customer.objects.all()
     # 1ページあたり10件
     paginator = Paginator(customer_list, 10)
@@ -21,4 +24,19 @@ def CustomerListView(request):
     return render(request, 'customers/customer_list.html', {
         'customers': customers,
         'page_range': page_range,
+    })
+
+def CustomerCreateView(request):
+    """顧客新規登録ビュー"""
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '顧客を登録しました。')
+            return redirect('customers:customer_list')
+    else:
+        form = CustomerForm()
+    
+    return render(request, 'customers/customer_create.html', {
+        'form': form,
     })

@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import CustomerListView
+from .views import CustomerListView, CustomerCreateView
 
 app_name = 'customers'
 
 urlpatterns = [
-    path('', CustomerListView, name='customer_list'),
+    path('index/', CustomerListView, name='customer_list'),
+    path('create/', CustomerCreateView, name='customer_create'),
 ]
