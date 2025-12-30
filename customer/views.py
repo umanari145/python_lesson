@@ -61,3 +61,18 @@ def CustomerUpdateView(request, pk):
         'form': form,
         'customer': customer,
     })
+
+def CustomerDeleteView(request):
+    """顧客削除ビュー（複数選択対応）"""
+    if request.method == 'POST':
+        # チェックボックスで選択されたIDを取得
+        customer_ids = request.POST.getlist('customer_ids')
+        
+        if customer_ids:
+            # 選択された顧客を削除
+            deleted_count = Customer.objects.filter(pk__in=customer_ids).delete()[0]
+            messages.success(request, f'{deleted_count}件の顧客を削除しました。')
+        else:
+            messages.warning(request, '削除する顧客を選択してください。')
+    
+    return redirect('customers:customer_list')

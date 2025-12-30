@@ -16,6 +16,11 @@
             margin-bottom: 20px;
         }
         
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        
         .btn {
             padding: 10px 20px;
             background-color: #4CAF50;
@@ -31,6 +36,19 @@
             background-color: #45a049;
         }
         
+        .btn-delete {
+            background-color: #f44336;
+        }
+        
+        .btn-delete:hover {
+            background-color: #da190b;
+        }
+        
+        .btn-delete:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -42,6 +60,11 @@
         }
         th {
             background-color: #f2f2f2;
+        }
+        
+        .checkbox-cell {
+            width: 40px;
+            text-align: center;
         }
         
         .customer-link {
@@ -70,12 +93,21 @@
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>会員一覧</h1>
-        <a href="{% url 'customers:customer_create' %}" class="btn">新規登録</a>
+        <div class="button-group">
+            <button type="button" id="deleteBtn" class="btn btn-delete" onclick="confirmDelete()">選択削除</button>
+            <a href="{% url 'customers:customer_create' %}" class="btn">新規登録</a>
+        </div>
     </div>
     
     {% if messages %}
@@ -89,30 +121,39 @@
     {% endif %}
     
     {% if customers %}
-        <table>
-            <thead>
-                <tr>
-                    <th>会員No</th>
-                    <th>名前</th>
-                    <th>登録日</th>
-                    <th>都道府県</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for customer in customers %}
-                <tr>
-                    <td>
-                        <a href="{% url 'customers:customer_edit' customer.pk %}" class="customer-link">
-                            {{ customer.customer_no }}
-                        </a>
-                    </td>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.registered_date|date:"Y年m月d日" }}</td>
-                    <td>{{ customer.pref.name }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <form method="post" action="{% url 'customers:customer_delete' %}" id="deleteForm">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th class="checkbox-cell">
+                            <input type="checkbox" id="checkAll" onchange="toggleAllCheckboxes(this)">
+                        </th>
+                        <th>会員No</th>
+                        <th>名前</th>
+                        <th>登録日</th>
+                        <th>都道府県</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" name="customer_ids" value="{{ customer.pk }}" class="customer-checkbox">
+                        </td>
+                        <td>
+                            <a href="{% url 'customers:customer_edit' customer.pk %}" class="customer-link">
+                                {{ customer.customer_no }}
+                            </a>
+                        </td>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.registered_date|date:"Y年m月d日" }}</td>
+                        <td>{{ customer.pref.name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
         
         <!-- ページネーション（オプション） -->
        <!-- ページネーション -->
@@ -152,5 +193,32 @@
     {% else %}
         <p>会員がありません。</p>
     {% endif %}
+    
+    <script>
+        // 全選択/全解除
+        function toggleAllCheckboxes(source) {
+            const checkboxes = document.getElementsByClassName('customer-checkbox');
+            for (let checkbox of checkboxes) {
+                checkbox.checked = source.checked;
+            }
+        }
+        
+        // 削除確認ダイアログ
+        function confirmDelete() {
+            const checkboxes = document.querySelectorAll('.customer-checkbox:checked');
+            
+            if (checkboxes.length === 0) {
+                alert('削除する顧客を選択してください。');
+                return false;
+            }
+            
+            const count = checkboxes.length;
+            const message = `選択された${count}件の顧客を削除しますか？\n\nこの操作は取り消せません。`;
+            
+            if (confirm(message)) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+    </script>
 </body>
 </html>
