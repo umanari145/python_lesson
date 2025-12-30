@@ -1,0 +1,37 @@
+<!-- ページネーション -->
+<div class="mt-6 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+        <!-- 最初・前へ -->
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">≪ 最初</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">‹ 前へ</a>
+        {% else %}
+            <span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">≪ 最初</span>
+            <span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">‹ 前へ</span>
+        {% endif %}
+        
+        <!-- ページ番号 -->
+        {% for page_num in page_range %}
+            {% if page_num == page_obj.number %}
+                <span class="px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-lg">{{ page_num }}</span>
+            {% else %}
+                <a href="?page={{ page_num }}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">{{ page_num }}</a>
+            {% endif %}
+        {% endfor %}
+        
+        <!-- 次へ・最後 -->
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">次へ ›</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">最後 ≫</a>
+        {% else %}
+            <span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">次へ ›</span>
+            <span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">最後 ≫</span>
+        {% endif %}
+    </div>
+    
+    <div class="text-sm text-gray-600">
+        全 {{ page_obj.paginator.count }} 件中 
+        {{ page_obj.start_index }} - {{ page_obj.end_index }} 件を表示
+    </div>
+</div>
+
