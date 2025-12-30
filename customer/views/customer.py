@@ -1,11 +1,9 @@
-from django.views.generic import ListView
 from django.core.paginator import Paginator
-from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Customer
-from .forms import CustomerForm
-import pprint
+from ..models import Customer
+from ..forms import CustomerForm
+
 
 def list_view(request):
     """顧客一覧ビュー"""
@@ -26,6 +24,7 @@ def list_view(request):
         'page_range': page_range,
     })
 
+
 def create_view(request):
     """顧客新規登録ビュー"""
     if request.method == 'POST':
@@ -40,6 +39,7 @@ def create_view(request):
     return render(request, 'customers/create.html', {
         'form': form,
     })
+
 
 def update_view(request, pk):
     """顧客編集ビュー"""
@@ -62,6 +62,7 @@ def update_view(request, pk):
         'customer': customer,
     })
 
+
 def delete_view(request):
     """顧客削除ビュー（複数選択対応）"""
     if request.method == 'POST':
@@ -76,3 +77,4 @@ def delete_view(request):
             messages.warning(request, '削除する顧客を選択してください。')
     
     return redirect('customers:customer_list')
+

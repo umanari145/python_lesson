@@ -1,7 +1,8 @@
 from django import forms
-from .models import Customer, Prefecture
 from django.core.exceptions import ValidationError
 from datetime import date
+from ..models import Customer, Prefecture
+
 
 class CustomerForm(forms.ModelForm):
     """顧客登録フォーム"""
@@ -64,3 +65,4 @@ class CustomerForm(forms.ModelForm):
             raise ValidationError('登録日に未来の日付は指定できません')
         
         return registered_date
+
