@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db.models import Sum, Count
 from django.db.models.functions import TruncMonth
-from ..models import Customer, Sales
+from ..models import Customer, Sales, Product
 from ..forms import SalesForm
+import json
 
 
 def list_view(request):
@@ -55,8 +56,13 @@ def create_view(request):
     else:
         form = SalesForm()
     
+    # 商品の価格情報をJSONで渡す
+    products = Product.objects.all()
+    product_prices = {str(p.id): str(p.unit_price) for p in products}
+    
     return render(request, 'sales/create.html', {
         'form': form,
+        'product_prices_json': json.dumps(product_prices),
     })
 
 
@@ -73,9 +79,14 @@ def update_view(request, pk):
     else:
         form = SalesForm(instance=sale)
     
+    # 商品の価格情報をJSONで渡す
+    products = Product.objects.all()
+    product_prices = {str(p.id): str(p.unit_price) for p in products}
+    
     return render(request, 'sales/edit.html', {
         'form': form,
         'sale': sale,
+        'product_prices_json': json.dumps(product_prices),
     })
 
 

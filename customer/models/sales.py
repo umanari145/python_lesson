@@ -22,7 +22,8 @@ class Sales(models.Model):
     unit_price = models.DecimalField(
         max_digits=10, 
         decimal_places=2, 
-        verbose_name='単価'
+        verbose_name='単価',
+        editable=False  # productの価格から自動でセットされるので手動編集不可
     )
     amount = models.DecimalField(
         max_digits=12, 
@@ -35,7 +36,11 @@ class Sales(models.Model):
         return f"{self.customer.name} - {self.product.name} ({self.sale_date})"
     
     def save(self, *args, **kwargs):
-        """保存時に金額を自動計算"""
+        """保存時に単価と金額を自動計算"""
+        # 商品の単価を自動設定
+        if self.product_id:
+            self.unit_price = self.product.unit_price
+        # 金額を計算
         self.amount = self.quantity * self.unit_price
         super().save(*args, **kwargs)
     

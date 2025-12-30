@@ -47,11 +47,8 @@ class Command(BaseCommand):
                 # 数量（1〜5個）
                 quantity = random.randint(1, 5)
                 
-                # 単価（標準価格の±20%の範囲でランダム）
-                price_variation = random.uniform(0.8, 1.2)
-                unit_price = product.standard_price * Decimal(str(price_variation))
-                # 小数点第2位で四捨五入
-                unit_price = unit_price.quantize(Decimal('0.01'))
+                # 単価は商品マスタから自動取得（bulk_createの場合は手動設定）
+                unit_price = product.unit_price
                 
                 sale = Sales(
                     customer=customer,

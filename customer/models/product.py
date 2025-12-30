@@ -9,15 +9,10 @@ class Product(models.Model):
         verbose_name='商品コード'
     )
     name = models.CharField(max_length=100, verbose_name='商品名')
-    standard_price = models.DecimalField(
+    unit_price = models.DecimalField(
         max_digits=10, 
         decimal_places=2, 
-        verbose_name='標準価格'
-    )
-    category = models.CharField(
-        max_length=50, 
-        verbose_name='カテゴリ',
-        blank=True
+        verbose_name='価格'
     )
     description = models.TextField(
         verbose_name='説明',

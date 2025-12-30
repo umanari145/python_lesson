@@ -26,26 +26,35 @@
             <!-- 商品 -->
             {% include "partials/select_field.html" with field=form.product label="商品" %}
             
+            <!-- 商品価格表示（参考情報） -->
+            <div id="product-price-info" class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p class="text-sm text-gray-700">
+                    <span class="font-semibold">単価:</span> 
+                    <span id="product-price" class="text-lg font-bold text-blue-600"></span>円
+                    <span class="text-xs text-gray-500 ml-2">(商品マスタより自動設定)</span>
+                </p>
+                <p class="text-xs text-gray-500 mt-2">
+                    ※ 商品を変更すると、その商品の標準価格が自動的に適用されます
+                </p>
+            </div>
+            
             <!-- 売上日 -->
             {% include "partials/date_field.html" with field=form.sale_date label="売上日" %}
             
             <!-- 数量 -->
             {% include "partials/input_field.html" with field=form.quantity label="数量" input_type="number" placeholder="数量を入力" min="1" %}
             
-            <!-- 単価 -->
-            {% include "partials/input_field.html" with field=form.unit_price label="単価" input_type="number" placeholder="単価を入力" step="0.01" %}
-            
             <!-- ボタン -->
             <div class="flex gap-4 pt-4">
                 <button 
                     type="submit" 
-                    class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-200"
+                    class="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition duration-200"
                 >
                     更新する
                 </button>
                 <a 
                     href="{% url 'customers:sales_list' %}" 
-                    class="px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition duration-200"
+                    class="px-6 py-3 bg-gray-200 text-white font-semibold rounded-lg hover:bg-gray-600 transition duration-200"
                 >
                     キャンセル
                 </a>
@@ -53,4 +62,37 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 商品の価格情報
+    const productPrices = {{ product_prices_json|safe }};
+    
+    // 商品選択時のイベントリスナー
+    document.addEventListener('DOMContentLoaded', function() {
+        const productSelect = document.getElementById('{{ form.product.id_for_label }}');
+        const priceInfo = document.getElementById('product-price-info');
+        const priceDisplay = document.getElementById('product-price');
+        
+        if (productSelect) {
+            productSelect.addEventListener('change', function() {
+                const selectedProductId = this.value;
+                
+                if (selectedProductId && productPrices[selectedProductId]) {
+                    const price = parseFloat(productPrices[selectedProductId]);
+                    priceDisplay.textContent = price.toLocaleString('ja-JP');
+                    priceInfo.classList.remove('hidden');
+                } else {
+                    priceInfo.classList.add('hidden');
+                }
+            });
+            
+            // 初期表示時に商品が選択されている場合（編集時）
+            if (productSelect.value) {
+                productSelect.dispatchEvent(new Event('change'));
+            }
+        }
+    });
+</script>
 {% endblock %}
