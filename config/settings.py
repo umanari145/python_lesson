@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PAGINATE_BY = 10
 
 # Application definition
 

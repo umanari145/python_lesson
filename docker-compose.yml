@@ -16,7 +16,9 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       POSTGRES_DB: testdb01
@@ -24,6 +26,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
+      DEBUG: 1
     depends_on: 
       - db
     networks:

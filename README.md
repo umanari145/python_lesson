@@ -45,7 +45,7 @@ psql -U postgres
 
 postgres=# 
 ```
-### webの起動
+### webの起動(docker-composeでやっていることの説明)
 
 ```bash
 docker exec -it django_app bash
@@ -55,10 +55,10 @@ python manage.py migrate
 python manage.py runserver  0:8000
 ```
 
-スーパーユーザーの作成
+#### スーパーユーザーの作成(初期のコマンドで作らない場合はこのようにして作る)
 ```bash
+docker exec -it django_app bash
 python manage.py createsuperuser
-
 Username: root
 Email address: root@gmail.com
 password pa$$w0rd#
@@ -67,4 +67,22 @@ password pa$$w0rd#
 個別プロジェクトの追加(初期設定と個別のモデルの２パターンある)
 ```bash
 python manage.py startapp customer
+```
+
+
+#### migration関連
+migrationファイルの作成
+modelから自動的に作られる
+```bash
+docker-compose exec web python manage.py makemigrations
+```
+
+migrationの実行
+```bash
+docker-compose exec web python manage.py migrate
+```
+
+テストデータ投入
+```bash
+docker-compose exec web python manage.py create_test_data
 ```

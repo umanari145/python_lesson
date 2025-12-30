@@ -19,9 +19,9 @@
     </style>
 </head>
 <body>
-    <h1>書籍一覧</h1>
+    <h1>会員一覧</h1>
     
-    {% if books %}
+    {% if customers %}
         <table>
             <thead>
                 <tr>
@@ -44,21 +44,40 @@
         </table>
         
         <!-- ページネーション（オプション） -->
-        {% if is_paginated %}
-        <div class="pagination">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">最初</a>
-                <a href="?page={{ page_obj.previous_page_number }}">前へ</a>
-            {% endif %}
-            
-            <span>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-            
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">次へ</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">最後</a>
-            {% endif %}
-        </div>
+       <!-- ページネーション -->
+       <div class="pagination">
+        <!-- 最初・前へ -->
+        {% if customers.has_previous %}
+            <a href="?page=1">≪ 最初</a>
+            <a href="?page={{ customers.previous_page_number }}">‹ 前へ</a>
+        {% else %}
+            <span style="color: #ccc;">≪ 最初</span>
+            <span style="color: #ccc;">‹ 前へ</span>
         {% endif %}
+        
+        <!-- ページ番号 -->
+        {% for page_num in page_range %}
+            {% if page_num == customers.number %}
+                <span class="current">{{ page_num }}</span>
+            {% else %}
+                <a href="?page={{ page_num }}">{{ page_num }}</a>
+            {% endif %}
+        {% endfor %}
+        
+        <!-- 次へ・最後 -->
+        {% if customers.has_next %}
+            <a href="?page={{ customers.next_page_number }}">次へ ›</a>
+            <a href="?page={{ customers.paginator.num_pages }}">最後 ≫</a>
+        {% else %}
+            <span style="color: #ccc;">次へ ›</span>
+            <span style="color: #ccc;">最後 ≫</span>
+        {% endif %}
+        
+        <div class="page-info">
+            全 {{ customers.paginator.count }} 件中 
+            {{ customers.start_index }} - {{ customers.end_index }} 件を表示
+        </div>
+    </div>
     {% else %}
         <p>会員がありません。</p>
     {% endif %}
