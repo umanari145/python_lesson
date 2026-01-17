@@ -113,6 +113,43 @@ customer/
 
 ```
 
+##### アプリの分割戦略
+1つのアプリにまとめる場合（現在の構成）
+
+```bash
+customer/  # 顧客関連をすべて含む
+├── models/
+│   ├── customer.py
+│   ├── product.py
+│   └── sales.py
+```
+メリット:
+- シンプルな構造
+- 関連機能が1箇所にまとまる
+- 小〜中規模プロジェクト向き
+
+
+##### 複数のアプリに分割する場合
+```bash
+customers/    # 顧客専用
+├── models.py
+└── views.py
+
+products/     # 商品専用
+├── models.py
+└── views.py
+
+sales/        # 売上専用
+├── models.py
+└── views.py
+
+```
+メリット
+- 大規模プロジェクトで管理しやすい
+- チームで分担しやすい
+- 再利用性が高い
+
+
 #### migration関連
 migrationファイルの作成
 modelから自動的に作られる
