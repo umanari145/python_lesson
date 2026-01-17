@@ -68,6 +68,18 @@ python manage.py migrate
 python manage.py runserver  0:8000
 ```
 
+### スーパーユーザー
+
+Django Admin画面へのアクセス
+
+http://localhost:8000/admin/
+
+- Django管理画面にログインするために必要
+- superuserがいないと管理画面に入れない
+- データの確認・編集・削除が行えない
+
+```
+
 #### スーパーユーザーの作成(初期のコマンドで作らない場合はこのようにして作る)
 ```bash
 docker exec -it django_app bash
