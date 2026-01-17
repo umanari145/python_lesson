@@ -18,7 +18,7 @@ docker compose run --rm web django-admin startproject config .
 ```
 
 Dockerコンテナ内でDjangoプロジェクトを初期化し、コンテナ環境で開発を始めるための基本的なコマンドを実行すると、以下のようなファイル構造が作成されます：
-```
+```bash
 .
 ├── config/
 │   ├── __init__.py
@@ -92,6 +92,26 @@ password pa$$w0rd#
 python manage.py startapp customer
 ```
 
+Djangoで新しいアプリケーション（app）を作成するコマンド
+
+```bash
+python manage.py startapp <app_name>
+```
+- customerという名前のアプリケーションを作成
+- Djangoの機能をモジュール単位で分割管理
+
+```bash
+customer/
+├── __init__.py
+├── admin.py          # 管理画面の設定
+├── apps.py           # アプリケーション設定
+├── migrations/       # データベース変更履歴
+│   └── __init__.py
+├── models.py         # データモデル（テーブル定義）
+├── tests.py          # テストコード
+└── views.py          # ビュー（画面処理）
+
+```
 
 #### migration関連
 migrationファイルの作成
