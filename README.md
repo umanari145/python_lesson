@@ -17,6 +17,18 @@ docker compose up -d
 docker compose run --rm web django-admin startproject config .
 ```
 
+Dockerコンテナ内でDjangoプロジェクトを初期化し、コンテナ環境で開発を始めるための基本的なコマンドを実行すると、以下のようなファイル構造が作成されます：
+```
+.
+├── config/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py      # Django設定ファイル
+│   ├── urls.py          # URLルーティング
+│   └── wsgi.py
+├── manage.py            # Django管理コマンド
+└── docker-compose.yml
+```
 
 ### 各パーツの意味
 1.docker compose run
@@ -107,6 +119,7 @@ docker compose exec web npm install
 
 # Tailwind CSSをビルド
 docker compose exec web npm run build:css
+# tailwindのcssはhtmlで使っているものを吸い上げる
 
 # 開発時は監視モードで自動ビルド
 docker compose exec web npm run watch:css
